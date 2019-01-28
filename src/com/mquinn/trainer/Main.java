@@ -17,11 +17,13 @@ public class Main {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME); // load opencv_java
 
-        ImageRunner runner = new ImageRunner("D:\\Hand Dataset\\mon95\\a");
+        ImageRunner runner = new ImageRunner("D:\\Hand Dataset\\test\\E");
 
-//        runner.getFiles2();
+        // Recursive file operation
+        runner.getFiles2();
 
-        runner.getFiles();
+        // Single dir operation
+//        runner.getFiles();
 
     }
 

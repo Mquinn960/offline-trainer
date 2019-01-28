@@ -1,7 +1,8 @@
 package com.mquinn.trainer;
 
-import org.opencv.core.Mat;
-import org.opencv.imgcodecs.Imgcodecs;
+import com.mquinn.trainer.sl_extensions.SvmService;
+import com.mquinn.trainer.sl_extensions.SvmTrainingData;
+import com.mquinn.trainer.sl_extensions.TrainingFrameProcessor;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -12,9 +13,16 @@ import java.io.IOException;
 public class ImageRunner {
 
     File dir;
+    ImageProcessor processor;
+    TrainingFrameProcessor trainingFrameProcessor;
+    SvmTrainingData trainingData;
+    SvmService svmService;
 
     public ImageRunner (String inputPath) {
         dir = new File(inputPath);
+        trainingFrameProcessor = new TrainingFrameProcessor();
+        processor = new ImageProcessor(trainingFrameProcessor);
+        svmService = new SvmService();
     }
 
     // array of supported extensions (use a List if you prefer)
@@ -37,6 +45,10 @@ public class ImageRunner {
 
     public void getFiles2(){
         getFilesRecursive(dir);
+        if (trainingFrameProcessor.getTrainingData() != null){
+            trainingData = trainingFrameProcessor.getTrainingData();
+            svmService.finaliseSVM(trainingData);
+        }
     }
 
     public void getFiles() {
@@ -48,18 +60,18 @@ public class ImageRunner {
                 try {
                     img = ImageIO.read(f);
 
-                    Mat something = Imgcodecs.imread(f.getAbsolutePath());
+                    // actual image processing
+                    processor.process(f);
 
-                    // you probably want something more involved here
-                    // to display in your UI
-                    System.out.println("image: " + f.getName());
-                    System.out.println(" width : " + img.getWidth());
-                    System.out.println(" height: " + img.getHeight());
-                    System.out.println(" size  : " + f.length());
                 } catch (final IOException e) {
                     // handle errors here
                 }
             }
+        }
+
+        if (trainingFrameProcessor.getTrainingData() != null){
+            trainingData = trainingFrameProcessor.getTrainingData();
+            svmService.finaliseSVM(trainingData);
         }
 
     }
@@ -73,10 +85,23 @@ public class ImageRunner {
                     getFilesRecursive(f);
                 if(f.isFile()){
                     System.out.println(f.getName());
+                    BufferedImage img = null;
+
+                    try {
+                        img = ImageIO.read(f);
+
+                        // actual image processing
+                        processor.process(f);
+
+                    } catch (final IOException e) {
+                        // handle errors here
+                    }
+
                     // Do something
                 }
             }
         }
+
     }
 
 }
