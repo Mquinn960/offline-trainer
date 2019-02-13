@@ -1,10 +1,14 @@
 package com.mquinn.trainer.sl_extensions;
 
+import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
 import org.opencv.ml.SVM;
+import sun.rmi.runtime.Log;
 
-import static org.opencv.core.CvType.CV_32F;
-import static org.opencv.core.CvType.CV_32S;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static org.opencv.core.CvType.*;
 import static org.opencv.ml.Ml.ROW_SAMPLE;
 
 public class SvmService {
@@ -26,13 +30,17 @@ public class SvmService {
 
         trainingData = inputTrainingData;
 
-        trainingData.labels.convertTo(trainingData.labels, CV_32S);
-        trainingData.samples.convertTo(trainingData.samples, CV_32F);
+        trainingData.labels.convertTo(trainingData.labels, CV_32SC1);
+        trainingData.samples.convertTo(trainingData.samples, CV_32FC1);
 
-//        svm.train
+//        String labels = trainingData.labels.dump();
+//        Logger.getAnonymousLogger().log(Level.INFO, labels);
+//
+//        String samples = trainingData.samples.dump();
+//        Logger.getAnonymousLogger().log(Level.INFO, samples);
 
-        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
-//        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+//        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
 
         svm.save("trained.xml");
 

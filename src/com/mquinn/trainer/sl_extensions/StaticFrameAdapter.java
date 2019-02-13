@@ -15,7 +15,7 @@ public class StaticFrameAdapter {
     public IFrame process(IFrame inputFrame) {
 
         // Resize image
-        outputFrame = resizer.process(outputFrame);
+//        outputFrame = resizer.process(outputFrame);
 
         return outputFrame;
 

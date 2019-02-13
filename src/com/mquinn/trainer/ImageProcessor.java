@@ -4,6 +4,8 @@ import com.mquinn.trainer.sl_extensions.StaticFramePreProcessor;
 import com.mquinn.trainer.sl_extensions.TrainingFrameProcessor;
 import mquinn.sign_language.imaging.IFrame;
 import mquinn.sign_language.processing.*;
+import mquinn.sign_language.rendering.IRenderer;
+import mquinn.sign_language.rendering.MainRenderer;
 
 import java.io.File;
 
@@ -11,7 +13,11 @@ public class ImageProcessor {
 
     private IFrame preProcessedFrame, processedFrame, postProcessedFrame, classifiedFrame;
 
+    private StaticImageUtils displayer = new StaticImageUtils();
+
     private IFrameProcessor mainFrameProcessor;
+
+    private IRenderer mainRenderer;
 
     private TrainingFrameProcessor frameTrainer;
 
@@ -36,6 +42,18 @@ public class ImageProcessor {
         frameTrainer.setInputFile(inputFile);
         frameTrainer.process(processedFrame);
 
+        mainRenderer.display(processedFrame);
+
+//        displayer.showResult(processedFrame.getRGBA());
+//
+//        displayer.showResult(processedFrame.getWindowMask());
+//
+//        displayer.showResult(processedFrame.getDownSampledMat());
+//
+//        displayer.showResult(processedFrame.getMaskedImage());
+//
+//        displayer.showResult(processedFrame.getCannyEdgeMask());
+
     }
 
     private void setProcessors(DetectionMethod method){
@@ -44,6 +62,8 @@ public class ImageProcessor {
 
         // Pre processors
         preProcessor = new StaticFramePreProcessor(new ResizingFrameProcessor(SizeOperation.DOWN));
+
+        mainRenderer = new MainRenderer(detectionMethod);
 
         // Frame Processors
         mainFrameProcessor = new MainFrameProcessor(detectionMethod);

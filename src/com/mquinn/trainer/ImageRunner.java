@@ -3,12 +3,17 @@ package com.mquinn.trainer;
 import com.mquinn.trainer.sl_extensions.SvmService;
 import com.mquinn.trainer.sl_extensions.SvmTrainingData;
 import com.mquinn.trainer.sl_extensions.TrainingFrameProcessor;
+import org.opencv.core.Core;
+import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+
+import static org.opencv.imgproc.Imgproc.cvtColor;
 
 public class ImageRunner {
 

@@ -5,8 +5,11 @@ import mquinn.sign_language.imaging.IFrame;
 import mquinn.sign_language.processing.IFrameProcessor;
 import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
 
 import java.io.File;
+
+import static org.opencv.imgproc.Imgproc.cvtColor;
 
 public class StaticFramePreProcessor implements IFrameProcessor {
 
@@ -29,6 +32,9 @@ public class StaticFramePreProcessor implements IFrameProcessor {
     public IFrame process(File inputFile) {
 
         Mat image = Imgcodecs.imread(inputFile.getAbsolutePath());
+
+//        cvtColor(image, image, Imgproc.COLOR_BGR2BGRA);
+        cvtColor(image, image, Imgproc.COLOR_BGR2RGBA);
 
         inputFrame = new Frame(image);
 
