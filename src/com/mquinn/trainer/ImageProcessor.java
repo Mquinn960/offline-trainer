@@ -27,7 +27,7 @@ public class ImageProcessor {
 
     public ImageProcessor(TrainingFrameProcessor inputFrameTrainer) {
         frameTrainer = inputFrameTrainer;
-        setProcessors(DetectionMethod.CANNY_EDGES);
+        setProcessors(DetectionMethod.SKELETON);
     }
 
     public void process(File inputFile){
@@ -42,8 +42,8 @@ public class ImageProcessor {
         frameTrainer.setInputFile(inputFile);
         frameTrainer.process(processedFrame);
 
-        mainRenderer.display(processedFrame);
-
+//        mainRenderer.display(processedFrame);
+//
 //        displayer.showResult(processedFrame.getRGBA());
 //
 //        displayer.showResult(processedFrame.getWindowMask());
