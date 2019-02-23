@@ -10,14 +10,37 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="opencv-340" level="project" />
+    <orderEntry type="library" name="opencv-343" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: org.opencv:opencv:3.4.0">
+      <library name="opencv343">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/opencv-340.jar!/" />
+          <root url="file://$MODULE_DIR$/lib" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <NATIVE>
+          <root url="file://$MODULE_DIR$/lib" />
+        </NATIVE>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/lib" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/lib" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library" exported="">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/new" />
+        </CLASSES>
+        <JAVADOC />
+        <NATIVE>
+          <root url="file://$MODULE_DIR$/new" />
+        </NATIVE>
+        <SOURCES>
+          <root url="file://$MODULE_DIR$/new" />
+        </SOURCES>
+        <jarDirectory url="file://$MODULE_DIR$/new" recursive="false" />
+        <jarDirectory url="file://$MODULE_DIR$/new" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
   </component>

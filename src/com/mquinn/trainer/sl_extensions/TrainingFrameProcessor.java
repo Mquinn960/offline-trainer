@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.opencv.core.Core.KMEANS_PP_CENTERS;
 import static org.opencv.core.CvType.CV_32FC1;
 import static org.opencv.core.CvType.CV_32SC1;
 
@@ -66,6 +67,13 @@ public class TrainingFrameProcessor implements IFrameProcessor {
         singleLabel = new Mat( new Size( 1, 1 ), CvType.CV_32SC1 );
         singleLabel.put(0,0, (int)letterLabel);
 
+        TermCriteria criteria = new TermCriteria(TermCriteria.EPS + TermCriteria.MAX_ITER,100,0.1);
+
+        Mat a = new Mat();
+        Mat b = new Mat();
+
+        Core.kmeans(flatFeatures, 10, a,criteria, 3, KMEANS_PP_CENTERS, b);
+
         trainingData.labels.push_back(singleLabel);
         trainingData.samples.push_back(flatFeatures);
 
@@ -77,18 +85,28 @@ public class TrainingFrameProcessor implements IFrameProcessor {
     }
 
     private boolean isEligibleToClassify() {
-        // SVM Prediction
+//        if (!workingFrame.getFeatures().isEmpty()) {
+//            Iterator<MatOfPoint> allMatOfPoint = workingFrame.getFeatures().iterator();
+//            while (allMatOfPoint.hasNext()) {
+//                MatOfPoint temp = allMatOfPoint.next();
+//                if (temp.toList().size() == 15){
+//                    features = temp;
+//                    return true;
+//                }
+//            }
+//        }
+//        return false;
+
+
         if (!workingFrame.getFeatures().isEmpty()) {
             Iterator<MatOfPoint> allMatOfPoint = workingFrame.getFeatures().iterator();
             while (allMatOfPoint.hasNext()) {
-                MatOfPoint temp = allMatOfPoint.next();
-                if (temp.toList().size() == 15){
-                    features = temp;
-                    return true;
-                }
+                features = allMatOfPoint.next();
+                return true;
             }
         }
         return false;
+
     }
 
     private void flattenFeatures(){

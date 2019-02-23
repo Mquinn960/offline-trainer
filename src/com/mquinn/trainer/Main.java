@@ -9,7 +9,7 @@ public class Main {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
         // Recursive file operation
-        ImageRunner runner = new ImageRunner("F:\\Hand Dataset\\test\\grass");
+        ImageRunner runner = new ImageRunner("F:\\Hand Dataset\\test\\mon95");
         runner.getFiles2();
 
         // Single dir operation

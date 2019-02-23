@@ -1,5 +1,6 @@
 package com.mquinn.trainer.sl_extensions;
 
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
 import org.opencv.ml.SVM;
@@ -43,6 +44,30 @@ public class SvmService {
         svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
 
         svm.save("trained.xml");
+
+    }
+
+    private void getPcaValues(){
+
+        Mat test = new Mat();
+        trainingData.samples.copyTo(test);
+
+        Mat mean = new Mat();
+        mean.convertTo(mean, CV_32FC1);
+
+        Mat vectors = new Mat();
+        vectors.convertTo(vectors, CV_32FC1);
+
+        Mat values = new Mat();
+        values.convertTo(values, CV_32FC1);
+
+        Core.PCACompute2(test, mean, vectors, values, 20);
+
+        mean.release();
+        vectors.release();
+        values.release();
+        test.release();
+
 
     }
 
