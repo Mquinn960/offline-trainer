@@ -27,7 +27,7 @@ public class ImageProcessor {
 
     public ImageProcessor(TrainingFrameProcessor inputFrameTrainer) {
         frameTrainer = inputFrameTrainer;
-        setProcessors(DetectionMethod.SKELETON);
+        setProcessors(DetectionMethod.CANNY_EDGES);
     }
 
     public void process(File inputFile){
