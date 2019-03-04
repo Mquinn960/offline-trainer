@@ -1,33 +1,32 @@
 package com.mquinn.trainer;
 
 import com.mquinn.trainer.sl_extensions.StaticFramePreProcessor;
-import com.mquinn.trainer.sl_extensions.TrainingFrameProcessor;
+import com.mquinn.trainer.sl_extensions.SvmService;
+import com.mquinn.trainer.sl_extensions.SvmInputData;
+import com.mquinn.trainer.sl_extensions.SvmPrepFrameProcessor;
 import mquinn.sign_language.imaging.IFrame;
 import mquinn.sign_language.processing.*;
-import mquinn.sign_language.rendering.IRenderer;
-import mquinn.sign_language.rendering.MainRenderer;
 
 import java.io.File;
 
-public class ImageProcessor {
+public class ImageProcessor implements IImageProcessor {
 
-    private IFrame preProcessedFrame, processedFrame, postProcessedFrame, classifiedFrame;
-
-    private StaticImageUtils displayer = new StaticImageUtils();
-
+    private IFrame preProcessedFrame, processedFrame;
     private IFrameProcessor mainFrameProcessor;
-
-    private IRenderer mainRenderer;
-
-    private TrainingFrameProcessor frameTrainer;
-
+    private SvmPrepFrameProcessor svmPrepper;
     private StaticFramePreProcessor preProcessor;
+    private SvmService svmService;
 
+    private SvmInputData trainingData = new SvmInputData();
+
+    private StaticImageUtils imgUtils = new StaticImageUtils();
     private DetectionMethod detectionMethod;
+    private Operation operation;
 
-    public ImageProcessor(TrainingFrameProcessor inputFrameTrainer) {
-        frameTrainer = inputFrameTrainer;
+    public ImageProcessor(Operation inputOperation) {
+        operation = inputOperation;
         setProcessors(DetectionMethod.CANNY_EDGES);
+        svmService = new SvmService();
     }
 
     public void process(File inputFile){
@@ -39,20 +38,31 @@ public class ImageProcessor {
         processedFrame = mainFrameProcessor.process(preProcessedFrame);
 
         // Feed into training data
-        frameTrainer.setInputFile(inputFile);
-        frameTrainer.process(processedFrame);
+        svmPrepper.setInputFile(inputFile);
+        svmPrepper.process(processedFrame);
 
-//        mainRenderer.display(processedFrame);
-//
-//        displayer.showResult(processedFrame.getRGBA());
-//
-//        displayer.showResult(processedFrame.getWindowMask());
-//
-//        displayer.showResult(processedFrame.getDownSampledMat());
-//
-//        displayer.showResult(processedFrame.getMaskedImage());
-//
-//        displayer.showResult(processedFrame.getCannyEdgeMask());
+    }
+
+    public void finalise(){
+
+        switch (operation){
+            case TRAIN:
+                if (svmPrepper.getTrainingData() != null){
+                    trainingData = svmPrepper.getTrainingData();
+                    svmService.finaliseSVMTraining(trainingData);
+                }
+                break;
+            case TEST:
+                if (svmPrepper.getTrainingData() != null){
+                    trainingData = svmPrepper.getTrainingData();
+                    SvmTestRunner svmTestRunner = new SvmTestRunner(svmService.getTrainedSVM(), trainingData);
+                    svmTestRunner.runTests();
+                }
+                break;
+            default:
+                // do nothing
+                break;
+        }
 
     }
 
@@ -63,10 +73,11 @@ public class ImageProcessor {
         // Pre processors
         preProcessor = new StaticFramePreProcessor(new ResizingFrameProcessor(SizeOperation.DOWN));
 
-        mainRenderer = new MainRenderer(detectionMethod);
-
         // Frame Processors
         mainFrameProcessor = new MainFrameProcessor(detectionMethod);
+
+        // Svm data housing class
+        svmPrepper = new SvmPrepFrameProcessor();
 
     }
 

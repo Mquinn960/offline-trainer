@@ -2,9 +2,7 @@ package com.mquinn.trainer;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
-import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -17,7 +15,9 @@ import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 public class StaticImageUtils {
 
     public static void showResult(Mat img) {
+
 //        Imgproc.resize(img, img, new Size(640, 480));
+
         MatOfByte matOfByte = new MatOfByte();
         Imgcodecs.imencode(".jpg", img, matOfByte);
         byte[] byteArray = matOfByte.toArray();

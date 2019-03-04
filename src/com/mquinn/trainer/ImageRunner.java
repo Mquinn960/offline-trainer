@@ -1,33 +1,18 @@
 package com.mquinn.trainer;
 
-import com.mquinn.trainer.sl_extensions.SvmService;
-import com.mquinn.trainer.sl_extensions.SvmTrainingData;
-import com.mquinn.trainer.sl_extensions.TrainingFrameProcessor;
-import org.opencv.core.Core;
-import org.opencv.imgcodecs.Imgcodecs;
-import org.opencv.imgproc.Imgproc;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
-
-import static org.opencv.imgproc.Imgproc.cvtColor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ImageRunner {
 
-    File dir;
-    ImageProcessor processor;
-    TrainingFrameProcessor trainingFrameProcessor;
-    SvmTrainingData trainingData;
-    SvmService svmService;
+    private File dir;
+    private IImageProcessor processor;
 
-    public ImageRunner (String inputPath) {
+    public ImageRunner (String inputPath, IImageProcessor inputProcessor) {
         dir = new File(inputPath);
-        trainingFrameProcessor = new TrainingFrameProcessor();
-        processor = new ImageProcessor(trainingFrameProcessor);
-        svmService = new SvmService();
+        processor = inputProcessor;
     }
 
     // array of supported extensions (use a List if you prefer)
@@ -35,9 +20,8 @@ public class ImageRunner {
             "gif", "png", "bmp", "jpg" // and other formats you need
     };
 
-    // filter to identify images based on their extensions
+    // File
     static final FilenameFilter IMAGE_FILTER = new FilenameFilter() {
-
         public boolean accept(final File dir, final String name) {
             for (final String ext : EXTENSIONS) {
                 if (name.endsWith("." + ext)) {
@@ -48,65 +32,48 @@ public class ImageRunner {
         }
     };
 
-    public void getFiles2(){
+    // Full recursive method for file processing in and below input dir
+    public void getFilesDeep(){
         getFilesRecursive(dir);
-        if (trainingFrameProcessor.getTrainingData() != null){
-            trainingData = trainingFrameProcessor.getTrainingData();
-            svmService.finaliseSVM(trainingData);
-        }
+        processor.finalise();
     }
 
+    // Get files in current folder and process
     public void getFiles() {
-
-        if (dir.isDirectory()) { // make sure it's a directory
-            for (final File f : dir.listFiles(IMAGE_FILTER)) {
-                BufferedImage img = null;
-
-                try {
-                    img = ImageIO.read(f);
-
-                    // actual image processing
-                    processor.process(f);
-
-                } catch (final IOException e) {
-                    // handle errors here
+        if (dir.isDirectory()) {
+            if (dir != null && dir.listFiles().length > 0){
+                for (final File file : dir.listFiles(IMAGE_FILTER)) {
+                    processFile(file);
                 }
             }
         }
 
-        if (trainingFrameProcessor.getTrainingData() != null){
-            trainingData = trainingFrameProcessor.getTrainingData();
-            svmService.finaliseSVM(trainingData);
-        }
-
+        processor.finalise();
     }
 
+    // Recursively process files in all nested directories
     private void getFilesRecursive(File curDir) {
-
         File[] filesList = curDir.listFiles();
         if (filesList != null && filesList.length > 0) {
-            for(File f : filesList){
-                if(f.isDirectory())
-                    getFilesRecursive(f);
-                if(f.isFile()){
-                    System.out.println(f.getName());
-                    BufferedImage img = null;
-
-                    try {
-                        img = ImageIO.read(f);
-
-                        // actual image processing
-                        processor.process(f);
-
-                    } catch (final IOException e) {
-                        // handle errors here
-                    }
-
-                    // Do something
+            for(File file : filesList){
+                if(file.isDirectory())
+                    getFilesRecursive(file);
+                if(file.isFile()){
+                    processFile(file);
                 }
             }
         }
 
+    }
+
+    // Perform actual file processing
+    private void processFile(File file){
+        System.out.println("Processing: " + file.getName());
+        try {
+            processor.process(file);
+        } catch (final Exception e) {
+            Logger.getAnonymousLogger().log(Level.WARNING,"File read failed");
+        }
     }
 
 }

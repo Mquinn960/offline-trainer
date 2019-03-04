@@ -4,18 +4,17 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
 import org.opencv.ml.SVM;
-import sun.rmi.runtime.Log;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import static org.opencv.core.CvType.*;
+import static org.opencv.core.CvType.CV_32FC1;
+import static org.opencv.core.CvType.CV_32SC1;
 import static org.opencv.ml.Ml.ROW_SAMPLE;
 
 public class SvmService {
 
-    SVM svm;
-    SvmTrainingData trainingData;
+    private SVM svm;
+    private SvmInputData trainingData, testingData;
+
+    private final String TRAINED_PATH = "trained.xml";
 
     public SvmService(){
 
@@ -27,24 +26,75 @@ public class SvmService {
 
     }
 
-    public void finaliseSVM(SvmTrainingData inputTrainingData) {
+    public void finaliseSVMTraining(SvmInputData inputTrainingData) {
 
         trainingData = inputTrainingData;
 
         trainingData.labels.convertTo(trainingData.labels, CV_32SC1);
         trainingData.samples.convertTo(trainingData.samples, CV_32FC1);
 
-//        String labels = trainingData.labels.dump();
-//        Logger.getAnonymousLogger().log(Level.INFO, labels);
-//
-//        String samples = trainingData.samples.dump();
-//        Logger.getAnonymousLogger().log(Level.INFO, samples);
+//        pcaReduce();
 
 //        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
         svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
 
-        svm.save("trained.xml");
+        svm.save(TRAINED_PATH);
 
     }
+
+    public SVM getTrainedSVM(){
+
+        return SVM.load(TRAINED_PATH);
+
+    }
+
+    private void pcaReduce () {
+
+        Mat test = new Mat();
+        test.convertTo(test, CV_32FC1);
+
+        Mat mean = new Mat();
+        mean.convertTo(mean, CV_32FC1);
+
+        Mat vectors = new Mat();
+        vectors.convertTo(vectors, CV_32FC1);
+
+        Mat values = new Mat();
+        values.convertTo(values, CV_32FC1);
+
+
+//        test = features.reshape(1,features.rows());
+//        test.convertTo(test, CV_32FC1);
+
+            test = trainingData.samples;
+
+
+        // Find a suitable number of components to retain 95% variance
+        Core.PCACompute2(test, mean, vectors, values, 0.95);
+
+
+//      Core.PCACompute2(test, mean, vectors, values, 10);
+
+        Mat projectVec = new Mat();
+        projectVec.convertTo(projectVec, CV_32FC1);
+
+        Core.PCAProject(test, mean, vectors, projectVec);
+
+        mean.release();
+        vectors.release();
+        projectVec.release();
+
+    }
+//
+//        private void normaliseFeatures(){
+//        MatOfDouble means = new MatOfDouble(), sigmas = new MatOfDouble();  //matrices to save all the means and standard deviations
+//        for (int i = 0; i < features.cols(); i++){  //take each of the features in vector
+//            MatOfDouble mean = new MatOfDouble();
+//            MatOfDouble sigma = new MatOfDouble();
+//            meanStdDev(features.col(i), mean, sigma);  //get mean and std deviation
+//            means.push_back(mean);
+//            sigmas.push_back(sigma);
+//            features.col(i) = (features.col(i) - mean) / sigma;  //normalization
+//        }
 
 }

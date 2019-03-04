@@ -8,13 +8,19 @@ public class Main {
 
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        // Recursive file operation
-        ImageRunner runner = new ImageRunner("F:\\Hand Dataset\\test\\mon95");
-        runner.getFiles2();
+        // Run training
+        ImageRunner trainingRunner = new ImageRunner("F:\\Hand Dataset\\train\\single",
+                                     new ImageProcessor(Operation.TRAIN));
+        trainingRunner.getFilesDeep();
+
+        // Run testing
+        ImageRunner testingRunner = new ImageRunner("F:\\Hand Dataset\\test\\single",
+                                    new ImageProcessor(Operation.TEST));
+        testingRunner.getFilesDeep();
 
         // Single dir operation
-//        ImageRunner runner = new ImageRunner("F:\\Hand Dataset\\test\\mon95\\a");
-//        runner.getFiles();
+        testingRunner = new ImageRunner("F:\\Hand Dataset\\test\\single",
+                new ImageProcessor(Operation.TEST));
 
     }
 

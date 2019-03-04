@@ -3,31 +3,29 @@ package com.mquinn.trainer.sl_extensions;
 import mquinn.sign_language.imaging.IFrame;
 import mquinn.sign_language.processing.IFrameProcessor;
 import mquinn.sign_language.svm.LetterClass;
-import org.opencv.core.*;
-import org.opencv.ml.SVM;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Size;
 
 import java.io.File;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static org.opencv.core.Core.KMEANS_PP_CENTERS;
-import static org.opencv.core.CvType.CV_32FC1;
-import static org.opencv.core.CvType.CV_32SC1;
-
-public class TrainingFrameProcessor implements IFrameProcessor {
+public class SvmPrepFrameProcessor implements IFrameProcessor {
 
 
-    IFrame workingFrame;
-    MatOfPoint features;
-    LetterClass result;
-    File workingFile;
-    SvmTrainingData trainingData;
-    Mat flatFeatures, singleLabel;
+    private IFrame workingFrame;
+    private MatOfPoint features;
+    private File workingFile;
+    private SvmInputData trainingData;
+    private Mat flatFeatures, singleLabel;
+    private int letterLabel;
 
-    public TrainingFrameProcessor(){
+    public SvmPrepFrameProcessor(){
 
-        trainingData = new SvmTrainingData();
+        trainingData = new SvmInputData();
 
         flatFeatures = new Mat();
         flatFeatures.convertTo(flatFeatures, CvType.CV_32FC1);
@@ -41,7 +39,7 @@ public class TrainingFrameProcessor implements IFrameProcessor {
         workingFrame = inputFrame;
 
 //        if (isEligibleToClassify()) {
-            train();
+            compileData();
 //        }
 
         return workingFrame;
@@ -52,17 +50,24 @@ public class TrainingFrameProcessor implements IFrameProcessor {
         workingFile = inputFile;
     }
 
-    public SvmTrainingData getTrainingData(){
+    public SvmInputData getTrainingData(){
         return trainingData;
     }
 
-    private void train(){
+    private void compileData(){
         flattenFeatures();
 
         flatFeatures.convertTo(flatFeatures, CvType.CV_32FC1);
 
         String letter = workingFile.getName().substring(0,1);
-        int letterLabel = LetterClass.getIndex(letter);
+
+        if (letter.equals("_")){
+            letterLabel = LetterClass.getIndex("NONE");
+        } else if (letter.matches("[A-Z]+")){
+            letterLabel = LetterClass.getIndex(letter);
+        } else {
+            letterLabel = LetterClass.getIndex("ERROR");
+        }
 
         singleLabel = new Mat( new Size( 1, 1 ), CvType.CV_32SC1 );
         singleLabel.put(0,0, (int)letterLabel);

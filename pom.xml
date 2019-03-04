@@ -16,6 +16,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/opencv-340.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
     </dependencies>
 
 </project>
