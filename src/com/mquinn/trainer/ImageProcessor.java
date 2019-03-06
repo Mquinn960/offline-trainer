@@ -1,9 +1,6 @@
 package com.mquinn.trainer;
 
-import com.mquinn.trainer.sl_extensions.StaticFramePreProcessor;
-import com.mquinn.trainer.sl_extensions.SvmService;
-import com.mquinn.trainer.sl_extensions.SvmInputData;
-import com.mquinn.trainer.sl_extensions.SvmPrepFrameProcessor;
+import com.mquinn.trainer.sl_extensions.*;
 import mquinn.sign_language.imaging.IFrame;
 import mquinn.sign_language.processing.*;
 
@@ -22,6 +19,8 @@ public class ImageProcessor implements IImageProcessor {
     private StaticImageUtils imgUtils = new StaticImageUtils();
     private DetectionMethod detectionMethod;
     private Operation operation;
+
+    private PcaData pcaData = new PcaData();
 
     public ImageProcessor(Operation inputOperation) {
         operation = inputOperation;

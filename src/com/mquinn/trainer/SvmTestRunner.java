@@ -5,8 +5,6 @@ import mquinn.sign_language.svm.LetterClass;
 import org.opencv.ml.SVM;
 
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class SvmTestRunner {
 

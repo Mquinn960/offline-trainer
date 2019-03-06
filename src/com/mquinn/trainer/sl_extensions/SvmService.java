@@ -14,6 +14,8 @@ public class SvmService {
     private SVM svm;
     private SvmInputData trainingData, testingData;
 
+    private PcaData pcaData = new PcaData();
+
     private final String TRAINED_PATH = "trained.xml";
 
     public SvmService(){
@@ -33,7 +35,9 @@ public class SvmService {
         trainingData.labels.convertTo(trainingData.labels, CV_32SC1);
         trainingData.samples.convertTo(trainingData.samples, CV_32FC1);
 
-//        pcaReduce();
+        Core.normalize(trainingData.samples, trainingData.samples, 1, 0, Core.NORM_MINMAX);
+
+        pcaReduce();
 
 //        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
         svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
@@ -43,9 +47,7 @@ public class SvmService {
     }
 
     public SVM getTrainedSVM(){
-
         return SVM.load(TRAINED_PATH);
-
     }
 
     private void pcaReduce () {
@@ -62,39 +64,23 @@ public class SvmService {
         Mat values = new Mat();
         values.convertTo(values, CV_32FC1);
 
+        test = trainingData.samples;
 
-//        test = features.reshape(1,features.rows());
-//        test.convertTo(test, CV_32FC1);
-
-            test = trainingData.samples;
-
-
-        // Find a suitable number of components to retain 95% variance
         Core.PCACompute2(test, mean, vectors, values, 0.95);
-
-
-//      Core.PCACompute2(test, mean, vectors, values, 10);
+//        Core.PCACompute2(test, mean, vectors, values, vectors.cols());
 
         Mat projectVec = new Mat();
         projectVec.convertTo(projectVec, CV_32FC1);
 
         Core.PCAProject(test, mean, vectors, projectVec);
 
+        trainingData.samples = projectVec;
+
         mean.release();
         vectors.release();
         projectVec.release();
+        test.release();
 
     }
-//
-//        private void normaliseFeatures(){
-//        MatOfDouble means = new MatOfDouble(), sigmas = new MatOfDouble();  //matrices to save all the means and standard deviations
-//        for (int i = 0; i < features.cols(); i++){  //take each of the features in vector
-//            MatOfDouble mean = new MatOfDouble();
-//            MatOfDouble sigma = new MatOfDouble();
-//            meanStdDev(features.col(i), mean, sigma);  //get mean and std deviation
-//            means.push_back(mean);
-//            sigmas.push_back(sigma);
-//            features.col(i) = (features.col(i) - mean) / sigma;  //normalization
-//        }
 
 }

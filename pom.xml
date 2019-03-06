@@ -7,19 +7,26 @@
     <groupId>mquinn</groupId>
     <artifactId>offline-trainer</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
             <groupId>org.opencv</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.3</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/lib/opencv-340.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.8.5</version>
+            <systemPath>${project.basedir}/new/opencv-343.jar</systemPath>
         </dependency>
     </dependencies>
 

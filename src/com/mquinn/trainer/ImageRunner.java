@@ -1,5 +1,7 @@
 package com.mquinn.trainer;
 
+import com.mquinn.trainer.sl_extensions.PcaData;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.logging.Level;
@@ -35,6 +37,7 @@ public class ImageRunner {
     // Full recursive method for file processing in and below input dir
     public void getFilesDeep(){
         getFilesRecursive(dir);
+        // PCA Stuff
         processor.finalise();
     }
 
