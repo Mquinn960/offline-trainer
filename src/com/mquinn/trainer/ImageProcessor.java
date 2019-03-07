@@ -25,7 +25,7 @@ public class ImageProcessor implements IImageProcessor {
     public ImageProcessor(Operation inputOperation) {
         operation = inputOperation;
         setProcessors(DetectionMethod.CANNY_EDGES);
-        svmService = new SvmService();
+        svmService = SvmService.getInstance();
     }
 
     public void process(File inputFile){
@@ -46,17 +46,13 @@ public class ImageProcessor implements IImageProcessor {
 
         switch (operation){
             case TRAIN:
-                if (svmPrepper.getTrainingData() != null){
                     trainingData = svmPrepper.getTrainingData();
                     svmService.finaliseSVMTraining(trainingData);
-                }
                 break;
             case TEST:
-                if (svmPrepper.getTrainingData() != null){
                     trainingData = svmPrepper.getTrainingData();
-                    SvmTestRunner svmTestRunner = new SvmTestRunner(svmService.getTrainedSVM(), trainingData);
+                    SvmTestRunner svmTestRunner = new SvmTestRunner(trainingData);
                     svmTestRunner.runTests();
-                }
                 break;
             default:
                 // do nothing

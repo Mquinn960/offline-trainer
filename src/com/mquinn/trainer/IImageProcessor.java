@@ -1,7 +1,5 @@
 package com.mquinn.trainer;
 
-import com.mquinn.trainer.sl_extensions.PcaData;
-
 import java.io.File;
 
 public interface IImageProcessor {

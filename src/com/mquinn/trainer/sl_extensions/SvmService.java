@@ -18,7 +18,12 @@ public class SvmService {
 
     private final String TRAINED_PATH = "trained.xml";
 
-    public SvmService(){
+    private Mat projectVec = new Mat();
+
+
+    private static SvmService instance = null;
+
+    protected SvmService(){
 
         svm = SVM.create();
 
@@ -26,6 +31,13 @@ public class SvmService {
         svm.setKernel(SVM.RBF);
         svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, 100, 1e-6));
 
+    }
+
+    public static SvmService getInstance(){
+        if (instance == null){
+            instance = new SvmService();
+        }
+        return instance;
     }
 
     public void finaliseSVMTraining(SvmInputData inputTrainingData) {
@@ -50,6 +62,14 @@ public class SvmService {
         return SVM.load(TRAINED_PATH);
     }
 
+    public SVM getInMemorySVM(){
+        return svm;
+    }
+
+    public PcaData getPcaData() {
+        return pcaData;
+    }
+
     private void pcaReduce () {
 
         Mat test = new Mat();
@@ -69,17 +89,14 @@ public class SvmService {
         Core.PCACompute2(test, mean, vectors, values, 0.95);
 //        Core.PCACompute2(test, mean, vectors, values, vectors.cols());
 
-        Mat projectVec = new Mat();
         projectVec.convertTo(projectVec, CV_32FC1);
 
         Core.PCAProject(test, mean, vectors, projectVec);
 
-        trainingData.samples = projectVec;
+        pcaData.mean = mean;
+        pcaData.eigen = vectors;
 
-        mean.release();
-        vectors.release();
-        projectVec.release();
-        test.release();
+        trainingData.samples = projectVec;
 
     }
 

@@ -9,36 +9,46 @@ public class Main {
         long trainingStart, trainingEnd, trainingTotal,
              testingStart, testingEnd, testingTotal;
 
-        ResultLogger logger = new ResultLogger("Run 1");
+        String runTitle = "Run 1";
 
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        String baseFolder = "F:\\Hand Dataset\\Live\\";
 
-        trainingStart = System.currentTimeMillis();
+        String[] datasets = new String[]{
+                "own\\",
+                "grassnoted\\",
+                "pugeault\\",
+                "mon95\\",
+                "ownbsl\\"
+        };
 
-        // Run training
-        ImageRunner trainingRunner = new ImageRunner("F:\\Hand Dataset\\train\\single",
-                                     new ImageProcessor(Operation.TRAIN));
-        trainingRunner.getFilesDeep();
+        for (String dataset: datasets) {
+            ResultLogger logger = new ResultLogger(dataset + "_" + runTitle);
 
-        trainingEnd = System.currentTimeMillis();
-        trainingTotal = trainingEnd - trainingStart;
+            System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-        testingStart = System.currentTimeMillis();
+            trainingStart = System.currentTimeMillis();
 
-        // Run testing
-        ImageRunner testingRunner = new ImageRunner("F:\\Hand Dataset\\test\\single",
-                                    new ImageProcessor(Operation.TEST));
-        testingRunner.getFilesDeep();
+            // Run training
+            ImageRunner trainingRunner = new ImageRunner(baseFolder + dataset + "train",
+                    new ImageProcessor(Operation.TRAIN));
+            trainingRunner.getFilesDeep();
 
-        testingEnd = System.currentTimeMillis();
-        testingTotal = testingEnd - testingStart;
+            trainingEnd = System.currentTimeMillis();
+            trainingTotal = trainingEnd - trainingStart;
 
-        logger.log("Training Time: " + TimeFormatter.millisToTime(trainingTotal));
-        logger.log("Testing Time: " + TimeFormatter.millisToTime(testingTotal));
+            testingStart = System.currentTimeMillis();
 
-        System.out.println("Training Time: " + TimeFormatter.millisToTime(trainingTotal));
-        System.out.println("Testing Time: " + TimeFormatter.millisToTime(testingTotal));
+            // Run testing
+            ImageRunner testingRunner = new ImageRunner(baseFolder + dataset + "test",
+                    new ImageProcessor(Operation.TEST));
+            testingRunner.getFilesDeep();
 
+            testingEnd = System.currentTimeMillis();
+            testingTotal = testingEnd - testingStart;
+
+            logger.log("Training Time: " + TimeFormatter.millisToTime(trainingTotal));
+            logger.log("Testing Time: " + TimeFormatter.millisToTime(testingTotal));
+        }
 
     }
 

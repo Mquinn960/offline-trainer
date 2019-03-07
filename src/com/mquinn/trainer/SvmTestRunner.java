@@ -1,7 +1,10 @@
 package com.mquinn.trainer;
 
+import com.mquinn.trainer.sl_extensions.PcaData;
 import com.mquinn.trainer.sl_extensions.SvmInputData;
+import com.mquinn.trainer.sl_extensions.SvmService;
 import mquinn.sign_language.svm.LetterClass;
+import org.opencv.core.Core;
 import org.opencv.ml.SVM;
 
 import java.util.Arrays;
@@ -11,14 +14,19 @@ public class SvmTestRunner {
     private SVM svm;
     private SvmInputData testData;
 
+    private PcaData pcaData;
+
     private LetterClass actualResult;
 
-    public SvmTestRunner (SVM inputSvm, SvmInputData inputData){
-        svm = inputSvm;
+    public SvmTestRunner ( SvmInputData inputData){
+        svm = SvmService.getInstance().getInMemorySVM();
+        pcaData = SvmService.getInstance().getPcaData();
         testData = inputData;
     }
 
     public void runTests(){
+
+        pcaProjectTestData();
 
         int rows = testData.labels.rows();
 
@@ -36,6 +44,12 @@ public class SvmTestRunner {
         }
 
         System.out.println(Arrays.deepToString(results));
+
+    }
+
+    private void pcaProjectTestData(){
+
+        Core.PCAProject(testData.samples, pcaData.mean, pcaData.eigen, testData.samples);
 
     }
 
