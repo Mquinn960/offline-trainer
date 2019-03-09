@@ -49,7 +49,7 @@ public class SvmService {
 
         Core.normalize(trainingData.samples, trainingData.samples, 1, 0, Core.NORM_MINMAX);
 
-        pcaReduce();
+//        pcaReduce();
 
 //        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
         svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);

@@ -9,27 +9,41 @@ public class Main {
         long trainingStart, trainingEnd, trainingTotal,
              testingStart, testingEnd, testingTotal;
 
-        String runTitle = "Run 1";
+        String runNumber = "1";
+        String kernel = "linear";
+        String features = "none";
+        String dimreduce = "none";
 
         String baseFolder = "F:\\Hand Dataset\\Live\\";
 
         String[] datasets = new String[]{
-                "own\\",
-                "grassnoted\\",
-                "pugeault\\",
-                "mon95\\",
-                "ownbsl\\"
+                "own",
+//                "grassnoted",
+//                "pugeault",
+//                "mon95",
+//                "ownbsl"
         };
 
+//        String baseFolder = "F:\\Hand Dataset\\Debug\\";
+//
+//        String[] datasets = new String[]{
+//                "single",
+//                "single2",
+//                "single3"
+//        };
+
         for (String dataset: datasets) {
-            ResultLogger logger = new ResultLogger(dataset + "_" + runTitle);
+
+            String logTitle = String.format("%s_%s_%s_%s_%s", runNumber, features, dataset, kernel, dimreduce);
+
+            ResultLogger logger = new ResultLogger(logTitle);
 
             System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
             trainingStart = System.currentTimeMillis();
 
             // Run training
-            ImageRunner trainingRunner = new ImageRunner(baseFolder + dataset + "train",
+            ImageRunner trainingRunner = new ImageRunner(baseFolder + dataset + "\\train",
                     new ImageProcessor(Operation.TRAIN));
             trainingRunner.getFilesDeep();
 
@@ -39,7 +53,7 @@ public class Main {
             testingStart = System.currentTimeMillis();
 
             // Run testing
-            ImageRunner testingRunner = new ImageRunner(baseFolder + dataset + "test",
+            ImageRunner testingRunner = new ImageRunner(baseFolder + dataset + "\\test",
                     new ImageProcessor(Operation.TEST));
             testingRunner.getFilesDeep();
 
