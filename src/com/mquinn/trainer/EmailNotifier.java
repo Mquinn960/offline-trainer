@@ -58,6 +58,7 @@ public class EmailNotifier {
                           "Good day.");
 
           Transport.send(message);
+          
 
           System.out.println("Email notification Sent");
 

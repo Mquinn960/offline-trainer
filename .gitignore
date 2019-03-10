@@ -3,6 +3,8 @@
 
 trained.xml
 
+src/com/mquinn/trainer/EmailNotifier.java
+
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
