@@ -7,8 +7,6 @@ import mquinn.sign_language.svm.LetterClass;
 import org.opencv.core.Core;
 import org.opencv.ml.SVM;
 
-import java.util.ArrayList;
-
 public class SvmTestRunner {
 
     private SVM svm;
@@ -20,10 +18,15 @@ public class SvmTestRunner {
 
     private LetterClass actualResult;
 
+    private long testingTotal, testingEnd, testingStart;
+
+    private ResultLoggerService logger;
+
     public SvmTestRunner ( SvmInputData inputData){
         svm = SvmService.getInstance().getInMemorySVM();
         pcaData = SvmService.getInstance().getPcaData();
         testData = inputData;
+        logger = ResultLoggerService.getInstance(false);
     }
 
     public void runTests(){
@@ -34,6 +37,8 @@ public class SvmTestRunner {
 
         String[][] results = new String[rows][2];
         int[][] intResults = new int[rows][2];
+
+        testingStart = System.currentTimeMillis();
 
         for (int row = 0; row < rows; row++){
 
@@ -52,6 +57,11 @@ public class SvmTestRunner {
             resultsMat[(int)testData.labels.get(row,0)[0] - 1][(int)response - 1]++;
 
         }
+
+        testingEnd = System.currentTimeMillis();
+        testingTotal = testingEnd - testingStart;
+
+        logger.log("Actual Testing Time: " + TimeFormatter.millisToTime(testingTotal), true);
 
         int[][][] finalMatrix = new int[26][4][rows];
 
@@ -79,52 +89,52 @@ public class SvmTestRunner {
             }
         }
 
-        System.out.print("SAMPLE CATEGORY MATRIX");
-        System.out.print("______________________");
-        System.out.println();
+        // Print sample category matrix
+        logger.log("", true);
+        logger.log("SAMPLE CATEGORY MATRIX", true);
+        logger.log("______________________", true);
+        logger.log("", true);
         for (int i=0; i< 26 ; i++) {
-            System.out.print("CLASS: " + (char)(i+65));
-            System.out.println();
+            logger.log("CLASS: " + (char)(i+65), true);
             for (int j=0; j < 4 ; j++){
-                System.out.print("TYPE:");
-                System.out.println();
                 switch (j){
                     case 0:
-                        System.out.print("TP");
+                        logger.log("TP: ", false);
                         break;
                     case 1:
-                        System.out.print("TN");
+                        logger.log("TN: ", false);
                         break;
                     case 2:
-                        System.out.print("FP");
+                        logger.log("FP: ", false);
                         break;
                     case 3:
-                        System.out.print("FN");
+                        logger.log("FN: ", false);
                         break;
                     default:
                         // Do nothing
                         break;
                 }
-                System.out.println();
                 for (int k=0; k < rows ; k++)
                     if (finalMatrix[i][j][k] != 0){
-                        System.out.print(finalMatrix[i][j][k] + " ");
+                        logger.log(finalMatrix[i][j][k] + " ", false);
                     }
-                // Log
-                System.out.println();
+                logger.log("", true);
             }
-            System.out.println();
+            logger.log("", true);
         }
 
         // Print confusion matrix simple
-        System.out.print("SIMPLE CONFUSION MATRIX");
-        System.out.println();
+        logger.log("SIMPLE CONFUSION MATRIX", true);
+        logger.log("______________________", true);
+        logger.log("", true);
         for (int i=0; i< 26 ; i++) {
-            for (int j=0; j < 26 ; j++)
-                System.out.print(resultsMat[i][j] + " ");
+            for (int j=0; j < 26 ; j++){
+                logger.log(resultsMat[i][j] + " ", false);
+            }
             // Log
-            System.out.println();
+            logger.log("", true);
         }
+        logger.log("", true);
 
     }
 

@@ -1,5 +1,6 @@
 package com.mquinn.trainer.sl_extensions;
 
+import com.mquinn.trainer.*;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.TermCriteria;
@@ -18,8 +19,14 @@ public class SvmService {
 
     private final String TRAINED_PATH = "trained.xml";
 
+    private int runCounter = 1;
+
     private Mat projectVec = new Mat();
 
+    private ResultLoggerService logger;
+
+    private long pcaTotal, pcaEnd, pcaStart,
+                 trainingTotal, trainingEnd, trainingStart;
 
     private static SvmService instance = null;
 
@@ -28,8 +35,10 @@ public class SvmService {
         svm = SVM.create();
 
         svm.setType(SVM.C_SVC);
-        svm.setKernel(SVM.RBF);
+        svm.setKernel(SVM.LINEAR);
         svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, 100, 1e-6));
+
+        logger = ResultLoggerService.getInstance(false);
 
     }
 
@@ -49,12 +58,28 @@ public class SvmService {
 
         Core.normalize(trainingData.samples, trainingData.samples, 1, 0, Core.NORM_MINMAX);
 
+//        pcaStart = System.currentTimeMillis();
+//
 //        pcaReduce();
+//
+//        pcaEnd = System.currentTimeMillis();
+//        pcaTotal = pcaEnd - pcaStart;
 
-        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
-//        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        trainingStart = System.currentTimeMillis();
 
-        svm.save(TRAINED_PATH);
+//        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+
+        trainingEnd = System.currentTimeMillis();
+        trainingTotal = trainingEnd - trainingStart;
+
+        logger.log("Actual SVM Training Time: " + TimeFormatter.millisToTime(trainingTotal), true);
+        logger.log("Actual PCA Time: " + TimeFormatter.millisToTime(pcaTotal), true);
+
+        logger.log("", true);
+
+        svm.save(runCounter + TRAINED_PATH);
+        runCounter += 4;
 
     }
 

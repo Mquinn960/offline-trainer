@@ -28,6 +28,11 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/new/opencv-343.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
+            <version>1.5.5</version>
+        </dependency>
     </dependencies>
 
 </project>

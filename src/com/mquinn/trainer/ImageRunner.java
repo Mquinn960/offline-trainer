@@ -7,14 +7,23 @@ import java.io.FilenameFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static org.opencv.ml.Ml.ROW_SAMPLE;
+
 public class ImageRunner {
 
     private File dir;
     private IImageProcessor processor;
 
+    private ResultLoggerService logger;
+
+    private long imgprocStart, imgprocEnd, imgProcTotal;
+
+    private int imgCounter = 0;
+
     public ImageRunner (String inputPath, IImageProcessor inputProcessor) {
         dir = new File(inputPath);
         processor = inputProcessor;
+        logger = ResultLoggerService.getInstance(false);
     }
 
     // array of supported extensions (use a List if you prefer)
@@ -36,8 +45,22 @@ public class ImageRunner {
 
     // Full recursive method for file processing in and below input dir
     public void getFilesDeep(){
+
+        imgprocStart = System.currentTimeMillis();
+
         getFilesRecursive(dir);
         // PCA Stuff
+
+        imgprocEnd = System.currentTimeMillis();
+        imgProcTotal= imgprocEnd - imgprocStart;
+
+        logger.log("", true);
+
+        logger.log("Total Image Processing Time: " + TimeFormatter.millisToTime(imgProcTotal), true);
+        logger.log("Average Image Processing Time: " + TimeFormatter.millisToTime(imgProcTotal/imgCounter), true);
+
+        logger.log("", true);
+
         processor.finalise();
     }
 
@@ -63,6 +86,7 @@ public class ImageRunner {
                     getFilesRecursive(file);
                 if(file.isFile()){
                     processFile(file);
+                    imgCounter++;
                 }
             }
         }

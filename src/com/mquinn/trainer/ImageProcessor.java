@@ -20,12 +20,17 @@ public class ImageProcessor implements IImageProcessor {
     private DetectionMethod detectionMethod;
     private Operation operation;
 
+    private int imgCounter = 0;
+
+    private ResultLoggerService logger;
+
     private PcaData pcaData = new PcaData();
 
     public ImageProcessor(Operation inputOperation) {
         operation = inputOperation;
         setProcessors(DetectionMethod.CANNY_EDGES);
         svmService = SvmService.getInstance();
+        logger = ResultLoggerService.getInstance(false);
     }
 
     public void process(File inputFile){
@@ -39,6 +44,12 @@ public class ImageProcessor implements IImageProcessor {
         // Feed into training data
         svmPrepper.setInputFile(inputFile);
         svmPrepper.process(processedFrame);
+
+        imgCounter++;
+
+        String operationTag = (operation == Operation.TRAIN) ? "Train": "Test";
+
+        logger.log(operationTag + " Sample " + imgCounter + ": " + inputFile.getName(), true);
 
     }
 
