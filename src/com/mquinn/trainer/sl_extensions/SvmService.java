@@ -51,8 +51,8 @@ public class SvmService {
 
 //        pcaReduce();
 
-//        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
-        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+//        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
 
         svm.save(TRAINED_PATH);
 
