@@ -19,7 +19,7 @@ public class SvmService {
 
     private final String TRAINED_PATH = "trained.xml";
 
-    private int runCounter = 1;
+    private int runCounter = 0;
 
     private Mat projectVec = new Mat();
 
@@ -30,12 +30,16 @@ public class SvmService {
 
     private static SvmService instance = null;
 
+    private boolean usePca = false;
+
     protected SvmService(){
 
         svm = SVM.create();
 
         svm.setType(SVM.C_SVC);
+
         svm.setKernel(SVM.LINEAR);
+
         svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, 100, 1e-6));
 
         logger = ResultLoggerService.getInstance(false);
@@ -49,6 +53,18 @@ public class SvmService {
         return instance;
     }
 
+    public void setKernelType(String kernel){
+        if (kernel.equals("linear")) {
+            svm.setKernel(SVM.LINEAR);
+        } else if (kernel.equals("rbf")){
+            svm.setKernel(SVM.RBF);
+        }
+    }
+
+    public void setRunCounter(int counter){
+        runCounter = counter;
+    }
+
     public void finaliseSVMTraining(SvmInputData inputTrainingData) {
 
         trainingData = inputTrainingData;
@@ -58,12 +74,16 @@ public class SvmService {
 
         Core.normalize(trainingData.samples, trainingData.samples, 1, 0, Core.NORM_MINMAX);
 
-//        pcaStart = System.currentTimeMillis();
-//
-//        pcaReduce();
-//
-//        pcaEnd = System.currentTimeMillis();
-//        pcaTotal = pcaEnd - pcaStart;
+        if (usePca){
+
+            pcaStart = System.currentTimeMillis();
+
+            pcaReduce();
+
+            pcaEnd = System.currentTimeMillis();
+            pcaTotal = pcaEnd - pcaStart;
+
+        }
 
         trainingStart = System.currentTimeMillis();
 
@@ -78,8 +98,7 @@ public class SvmService {
 
         logger.log("", true);
 
-        svm.save(runCounter + TRAINED_PATH);
-        runCounter += 4;
+        svm.save(runCounter + "_" + TRAINED_PATH);
 
     }
 
@@ -93,6 +112,22 @@ public class SvmService {
 
     public PcaData getPcaData() {
         return pcaData;
+    }
+
+    public void destroy(){
+        instance = null;
+    }
+
+    public void setPcaUse (String dimreduction){
+        if (dimreduction.equals("pca")){
+            usePca = true;
+        } else if (dimreduction.equals("none")){
+            usePca = false;
+        }
+    }
+
+    public boolean getPcaUse (){
+        return usePca;
     }
 
     private void pcaReduce () {

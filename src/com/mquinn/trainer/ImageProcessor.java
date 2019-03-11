@@ -77,7 +77,7 @@ public class ImageProcessor implements IImageProcessor {
         detectionMethod = method;
 
         // Pre processors
-        preProcessor = new StaticFramePreProcessor(new ResizingFrameProcessor(SizeOperation.DOWN));
+        preProcessor = new StaticFramePreProcessor(new ResizingFrameProcessor(SizeOperation.UP), new DownSamplingFrameProcessor());
 
         // Frame Processors
         mainFrameProcessor = new MainFrameProcessor(detectionMethod);

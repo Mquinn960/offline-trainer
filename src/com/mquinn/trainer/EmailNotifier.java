@@ -33,32 +33,32 @@ public class EmailNotifier {
         session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("username","password");
+                        return new PasswordAuthentication("mq.sl.trainer@gmail.com","MyPassword1!");
                     }
                 });
 
     }
 
-    public void sendNotification(String runNumber, String elapsedTime){
+    public void sendNotification(String messageText, String eventDescription){
 
       try {
 
           Message message = new MimeMessage(session);
 
-          message.setFrom(new InternetAddress("test@email.com"));
+          message.setFrom(new InternetAddress("mq.sl.trainer@gmail.com"));
 
           message.setRecipients(Message.RecipientType.TO,
-                  InternetAddress.parse("my@destination.com"));
+                  InternetAddress.parse("matt@mquinn.co.uk"));
 
-          message.setSubject("Run " + runNumber + " complete");
+          message.setSubject(eventDescription);
 
           message.setText("Hello," +
-                          "\n\n Run " + runNumber + " completed in:" + "\r\n" +
-                          elapsedTime + "\n\n" +
+                          "\n\n" +
+                           messageText +
+                          "\n\n" +
                           "Good day.");
 
           Transport.send(message);
-          
 
           System.out.println("Email notification Sent");
 

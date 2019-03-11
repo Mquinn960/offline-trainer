@@ -99,7 +99,7 @@ public class ImageRunner {
         try {
             processor.process(file);
         } catch (final Exception e) {
-            Logger.getAnonymousLogger().log(Level.WARNING,"File read failed");
+            Logger.getAnonymousLogger().log(Level.WARNING,"Image processing failed" + e.getMessage());
         }
     }
 

@@ -31,7 +31,9 @@ public class SvmTestRunner {
 
     public void runTests(){
 
-//        pcaProjectTestData();
+        if (SvmService.getInstance().getPcaUse()) {
+            pcaProjectTestData();
+        }
 
         int rows = testData.labels.rows();
 
@@ -66,25 +68,37 @@ public class SvmTestRunner {
         int[][][] finalMatrix = new int[26][4][rows];
 
         for (int i=0; i<26; i++){
-            for (int j=0; j<rows; j++){
+            for (int j=0; j < rows; j++){
                 int sample = j+1;
-                // Positive
-                if (intResults[j][0] != 0 && intResults[j][1] != 0){
-                    if ((intResults[j][0] == intResults[j][1]) && (i == intResults[j][1] && i == intResults[j][0])){
-                        // True Positive
-                        finalMatrix[i-1][0][j] = sample;
-                        // True Negative
-                        for (int k=0; k<26; k++){
-                            if (k != (intResults[j][1])-1){
-                                finalMatrix[k][1][j] = sample;
+                // for any non empty cells
+                if (intResults[j][0] != 0 && intResults[j][1] != 0) {
+                    // for correct predictions equal to this class in the loop
+                    if (i == intResults[j][1]-1 && i == intResults[j][0]-1) {
+                        // for correct predictions
+                        if (intResults[j][0] == intResults[j][1]) {
+                            // True Positive
+                            // add true positive value to this class in the matrix
+                            finalMatrix[i][0][j] = sample;
+                            // True Negative
+                            // add true negative to every other class in the matrix
+                            for (int k=0; k<26; k++){
+                                if (k != (intResults[j][1])-1) {
+                                    finalMatrix[k][1][j] = sample;
+                                }
                             }
                         }
+                    // otherwise for non matching class predictions
+                    } else {
+                        // if predicted class is current class
+                        if (i == intResults[j][1]-1) {
+                            // False Positive
+                            finalMatrix[i][2][j] = sample;
+                        // else if actual class was current class
+                        } else if (i == intResults[j][0]-1) {
+                            // False Negative
+                            finalMatrix[i][3][j] = sample;
+                        }
                     }
-                } else {
-                    // False Negative
-                    finalMatrix[i][3][j] = sample;
-                    // False Positive
-                    finalMatrix[intResults[j][i]][2][j] = sample;
                 }
             }
         }
