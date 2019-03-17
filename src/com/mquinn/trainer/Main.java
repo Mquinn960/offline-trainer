@@ -15,37 +15,37 @@ public class Main {
         EmailNotifier emailNotifier = new EmailNotifier();
 
         int runNumber = 1;
-        String features = "none";
+        String features = "canny";
 
         String baseFolder = "F:\\Hand Dataset\\Live\\";
         String resultsFolder = "F:\\Hand Dataset\\Results\\";
 
         String[] kernels = new String[]{
-                "linear",
+//                "linear",
                 "rbf"
         };
 
         String[] dimReduceType = new String[]{
                 "none",
-                "pca"
+//                "pca"
         };
+
+//        String[] datasets = new String[]{
+//                "own",
+//                "grassnoted",
+//                "pugeault",
+//                "mon95",
+//                "ownbsl"
+//        };
+
+        baseFolder = "F:\\Hand Dataset\\Debug\\";
 
         String[] datasets = new String[]{
-                "own",
-                "grassnoted",
-                "pugeault",
-                "mon95",
-                "ownbsl"
-        };
-
-//        baseFolder = "F:\\Hand Dataset\\Debug\\";
-//
-//        String[] datasets = new String[]{
-//                "single",
+                "own_neg",
 //                "single2",
 //                "single3",
 //                "single4"
-//        };
+        };
 
         emailNotifier.sendNotification("A new batch training run is commencing.", "Batch run beginning");
 

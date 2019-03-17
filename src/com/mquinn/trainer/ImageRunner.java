@@ -1,13 +1,9 @@
 package com.mquinn.trainer;
 
-import com.mquinn.trainer.sl_extensions.PcaData;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static org.opencv.ml.Ml.ROW_SAMPLE;
 
 public class ImageRunner {
 

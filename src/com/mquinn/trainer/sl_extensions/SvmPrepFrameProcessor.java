@@ -63,8 +63,10 @@ public class SvmPrepFrameProcessor implements IFrameProcessor {
 
         String letter = workingFile.getName().substring(0,1).toUpperCase();
 
-        if (letter.equals("_")){
+        if (letter.equals("_")) {
             letterLabel = LetterClass.getIndex("NONE");
+        } else if (letter.equals("%")) {
+            letterLabel = LetterClass.getIndex("SPACE");
         } else if (letter.matches("[A-Z]+")){
             letterLabel = LetterClass.getIndex(letter);
         } else {
