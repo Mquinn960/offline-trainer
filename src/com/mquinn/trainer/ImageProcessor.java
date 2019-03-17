@@ -28,7 +28,7 @@ public class ImageProcessor implements IImageProcessor {
 
     public ImageProcessor(Operation inputOperation) {
         operation = inputOperation;
-        setProcessors(DetectionMethod.CANNY_EDGES);
+        setProcessors(DetectionMethod.CONTOUR_MASK);
         svmService = SvmService.getInstance();
         logger = ResultLoggerService.getInstance(false);
     }

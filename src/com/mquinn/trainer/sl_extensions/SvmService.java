@@ -19,7 +19,7 @@ public class SvmService {
 
     private final String TRAINED_PATH = "trained.xml";
 
-    private int runCounter = 0;
+    private int runCounter;
 
     private Mat projectVec = new Mat();
 

@@ -14,12 +14,11 @@ public class Main {
 
         EmailNotifier emailNotifier = new EmailNotifier();
 
-        int runNumber = 21;
-        String features = "canny";
+        int runNumber = 1;
+        String features = "none";
 
         String baseFolder = "F:\\Hand Dataset\\Live\\";
         String resultsFolder = "F:\\Hand Dataset\\Results\\";
-        String logExtension = ".txt";
 
         String[] kernels = new String[]{
                 "linear",
@@ -50,19 +49,17 @@ public class Main {
 
         emailNotifier.sendNotification("A new batch training run is commencing.", "Batch run beginning");
 
-        SvmService svmService1 = SvmService.getInstance();
-
         for (String svmKernel: kernels) {
 
-            svmService1.setKernelType(svmKernel);
+            SvmService.getInstance().setKernelType(svmKernel);
 
             for (String dimType: dimReduceType) {
 
-                svmService1.setPcaUse(dimType);
+                SvmService.getInstance().setPcaUse(dimType);
 
-                for (String dataset: datasets) {
+                for (String dataset: datasets)  {
 
-                    svmService1.setRunCounter(runNumber);
+                    SvmService.getInstance().setRunCounter(runNumber);
 
                     emailNotifier.sendNotification("Run " + runNumber + " has begun." + "\n\n" +
                                     "Features: " + features + "\r\n" +
@@ -71,8 +68,8 @@ public class Main {
                                     "Dataset: " + dataset + "\r\n",
                             "Run " + runNumber + " commencing");
 
-                    String logTitle = String.format("%s_%s_%s_%s_%s", runNumber, features, dataset, svmKernel, dimType);
-                    String logFile = resultsFolder + logTitle + logExtension;
+                    String logTitle = String.format("%s_%s_%s_%s_%s", runNumber, features, svmKernel, dimType, dataset);
+                    String logFile = resultsFolder + logTitle;
 
                     ResultLoggerService logger = ResultLoggerService.getInstance(false);
                     logger.setLogFile(logFile);
@@ -118,7 +115,10 @@ public class Main {
                     runNumber ++;
 
                     logger.destroy();
+
                 }
+
+                SvmService.getInstance().destroy();
 
             }
 
