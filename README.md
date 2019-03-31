@@ -35,7 +35,7 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 * https://github.com/Mquinn960/dataset-creator
 
-An example valid folder structure of multiple datasets can be found below:
+An example valid folder structure of multiple datasets can be found below. If you are looking for a good starting place to compile a dataset, please see the MNIST ASL Alphabet Sign Language dataset **[MNIST Sign Language Dataset](https://www.kaggle.com/datamunge/sign-language-mnist)**
 
 ```
 /dataset1
