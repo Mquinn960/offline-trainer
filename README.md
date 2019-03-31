@@ -2,7 +2,6 @@
 This project is an offline training and testing module for OpenCV Support Vector Machines. Input image datasets can be classified and compiled into output SVM model files for use with the Sign Language app noted below.
 
 * https://github.com/Mquinn960/sign-language
-* https://github.com/Mquinn960/dataset-creator
 
 ![Alt text](/Preview.png?raw=true "Preview")
 
@@ -32,7 +31,10 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 ## User Guide
 
-* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. An example valid folder structure of multiple datasets can be found below.
+* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. An example valid folder structure of multiple datasets can be found below. To easily create these datasets you can use the Dataset Creator python app with your webcam of choice:
+
+* https://github.com/Mquinn960/dataset-creator
+
 ```
 /dataset1
   |
