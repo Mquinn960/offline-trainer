@@ -32,7 +32,7 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 ## User Guide
 
-* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. An example valid folder structure of multiple datasets can be found below. If you want preconfigured datasets for this, please see ###TODO: add repo### for the raw data to process yourself, or ###TODO: add repo### to simply view the resultant logs and trained SVMs.
+* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. An example valid folder structure of multiple datasets can be found below.
 ```
 /dataset1
   |
