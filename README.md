@@ -31,9 +31,13 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 ## User Guide
 
-* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. An example valid folder structure of multiple datasets can be found below. To easily create these datasets you can use the Dataset Creator python app with your webcam of choice:
+* This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. To easily create these datasets you can use the Dataset Creator python app with your webcam of choice:
 
 * https://github.com/Mquinn960/dataset-creator
+
+An example valid folder structure of multiple datasets can be found below. To pull some preconfigured datasets for this project please see:
+
+* https://github.com/Mquinn960/offline-trainer-data
 
 ```
 /dataset1
