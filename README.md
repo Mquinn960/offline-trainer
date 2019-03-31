@@ -64,6 +64,7 @@ This project is an offline training and testing module for OpenCV Support Vector
   * Kernels - A list of available SVM kernels (Linear, RBF)
   * Dimensionality Reduction Type - Any dimensionality reduction techniques to employ (None, PCA)
   * Datasets - Input datasets you have produced (Add strings corresponding to any top level dataset folders in your dataset root folder in the format shown above)
+* If you want to train a simple combination of parameters, remove everything else. Otherwise every combination of parameters will be trained and tested.
 * Run the main project once this data is in place, the output ```trained.xml``` files will be output to the project root directory
 * You can now use the trained SVM xml file with the Sign Language app (see repo in header) to test your model on your live Android device
 
