@@ -13,7 +13,7 @@ import static org.opencv.ml.Ml.ROW_SAMPLE;
 public class SvmService {
 
     private SVM svm;
-    private SvmInputData trainingData, testingData;
+    private SvmInputData trainingData;
 
     private PcaData pcaData = new PcaData();
 
@@ -35,13 +35,9 @@ public class SvmService {
     protected SvmService(){
 
         svm = SVM.create();
-
         svm.setType(SVM.C_SVC);
-
         svm.setKernel(SVM.RBF);
-
         svm.setTermCriteria(new TermCriteria(TermCriteria.MAX_ITER, 100, 1e-6));
-
         logger = ResultLoggerService.getInstance(false);
 
     }
@@ -65,7 +61,7 @@ public class SvmService {
         runCounter = counter;
     }
 
-    public void finaliseSVMTraining(SvmInputData inputTrainingData) {
+    public void finaliseSVMTraining(SvmInputData inputTrainingData, boolean trainAuto) {
 
         trainingData = inputTrainingData;
 
@@ -87,8 +83,11 @@ public class SvmService {
 
         trainingStart = System.currentTimeMillis();
 
-//        svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
-        svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        if (trainAuto){
+            svm.trainAuto(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        } else {
+            svm.train(trainingData.samples, ROW_SAMPLE, trainingData.labels);
+        }
 
         trainingEnd = System.currentTimeMillis();
         trainingTotal = trainingEnd - trainingStart;
@@ -118,10 +117,10 @@ public class SvmService {
         instance = null;
     }
 
-    public void setPcaUse (String dimreduction){
-        if (dimreduction.equals("pca")){
+    public void setPcaUse (String dimReduction){
+        if (dimReduction.equals("pca")){
             usePca = true;
-        } else if (dimreduction.equals("none")){
+        } else if (dimReduction.equals("none")){
             usePca = false;
         }
     }
@@ -132,8 +131,8 @@ public class SvmService {
 
     private void pcaReduce () {
 
-        Mat test = new Mat();
-        test.convertTo(test, CV_32FC1);
+        Mat pcaHolder = new Mat();
+        pcaHolder.convertTo(pcaHolder, CV_32FC1);
 
         Mat mean = new Mat();
         mean.convertTo(mean, CV_32FC1);
@@ -144,19 +143,23 @@ public class SvmService {
         Mat values = new Mat();
         values.convertTo(values, CV_32FC1);
 
-        test = trainingData.samples;
+        pcaHolder = trainingData.samples;
 
-        Core.PCACompute2(test, mean, vectors, values, 0.95);
-//        Core.PCACompute2(test, mean, vectors, values, vectors.cols());
+        Core.PCACompute2(pcaHolder, mean, vectors, values, 0.95);
 
         projectVec.convertTo(projectVec, CV_32FC1);
 
-        Core.PCAProject(test, mean, vectors, projectVec);
+        Core.PCAProject(pcaHolder, mean, vectors, projectVec);
 
         pcaData.mean = mean;
         pcaData.eigen = vectors;
 
         trainingData.samples = projectVec;
+
+        pcaHolder.release();
+        mean.release();
+        vectors.release();
+        values.release();
 
     }
 

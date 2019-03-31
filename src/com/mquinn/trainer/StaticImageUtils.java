@@ -2,6 +2,7 @@ package com.mquinn.trainer;
 
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
+import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
@@ -16,12 +17,21 @@ import static org.opencv.imgproc.Imgproc.cvtColor;
 
 public class StaticImageUtils {
 
-    public static void showResult(Mat img) {
+    public static void showResult(Mat img, boolean BGR, boolean resize) {
 
-//        Imgproc.resize(img, img, new Size(640, 480));
+        // This is a static debug class for examining image matrices "in-flight"
+        // Example usage (can also be called form immediate evaluation window):
+        // StaticImageUtils.showResult(workingFrame.getRGBA(), true, false);
 
-        // Convert any RGB images back to BGR before display
-//        cvtColor(img, img, Imgproc.COLOR_RGB2BGR);
+        if (resize) {
+            // Optionally resize input image
+            Imgproc.resize(img, img, new Size(640, 480));
+        }
+
+        if (BGR){
+            // Convert any RGB images back to BGR before display to display normally
+            cvtColor(img, img, Imgproc.COLOR_RGB2BGR);
+        }
 
         MatOfByte matOfByte = new MatOfByte();
         Imgcodecs.imencode(".jpg", img, matOfByte);

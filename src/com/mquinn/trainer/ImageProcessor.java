@@ -16,7 +16,6 @@ public class ImageProcessor implements IImageProcessor {
 
     private SvmInputData trainingData = new SvmInputData();
 
-    private StaticImageUtils imgUtils = new StaticImageUtils();
     private DetectionMethod detectionMethod;
     private Operation operation;
 
@@ -24,24 +23,19 @@ public class ImageProcessor implements IImageProcessor {
 
     private ResultLoggerService logger;
 
-    private PcaData pcaData = new PcaData();
-
-    public ImageProcessor(Operation inputOperation) {
+    public ImageProcessor(Operation inputOperation, DetectionMethod method) {
         operation = inputOperation;
-        setProcessors(DetectionMethod.CANNY_EDGES);
+        setProcessors(method);
         svmService = SvmService.getInstance();
         logger = ResultLoggerService.getInstance(false);
     }
 
     public void process(File inputFile){
 
-        // Generate Frame from input frame and downsample
         preProcessedFrame = preProcessor.process(inputFile);
 
-        // Generate useful information from frame
         processedFrame = mainFrameProcessor.process(preProcessedFrame);
 
-        // Feed into training data
         svmPrepper.setInputFile(inputFile);
         svmPrepper.process(processedFrame);
 
@@ -58,7 +52,7 @@ public class ImageProcessor implements IImageProcessor {
         switch (operation){
             case TRAIN:
                     trainingData = svmPrepper.getTrainingData();
-                    svmService.finaliseSVMTraining(trainingData);
+                    svmService.finaliseSVMTraining(trainingData, true);
                 break;
             case TEST:
                     trainingData = svmPrepper.getTrainingData();
@@ -66,23 +60,19 @@ public class ImageProcessor implements IImageProcessor {
                     svmTestRunner.runTests();
                 break;
             default:
-                // do nothing
                 break;
         }
 
     }
 
     private void setProcessors(DetectionMethod method){
-        // Set detection method
+
         detectionMethod = method;
 
-        // Pre processors
         preProcessor = new StaticFramePreProcessor(new ResizingFrameProcessor(SizeOperation.UP), new DownSamplingFrameProcessor());
 
-        // Frame Processors
         mainFrameProcessor = new MainFrameProcessor(detectionMethod);
 
-        // Svm data housing class
         svmPrepper = new SvmPrepFrameProcessor();
 
     }

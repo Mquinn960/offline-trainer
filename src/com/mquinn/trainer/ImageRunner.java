@@ -22,12 +22,10 @@ public class ImageRunner {
         logger = ResultLoggerService.getInstance(false);
     }
 
-    // array of supported extensions (use a List if you prefer)
     static final String[] EXTENSIONS = new String[]{
-            "gif", "png", "bmp", "jpg" // and other formats you need
+            "gif", "png", "bmp", "jpg"
     };
 
-    // File
     static final FilenameFilter IMAGE_FILTER = new FilenameFilter() {
         public boolean accept(final File dir, final String name) {
             for (final String ext : EXTENSIONS) {
@@ -45,7 +43,6 @@ public class ImageRunner {
         imgprocStart = System.currentTimeMillis();
 
         getFilesRecursive(dir);
-        // PCA Stuff
 
         imgprocEnd = System.currentTimeMillis();
         imgProcTotal= imgprocEnd - imgprocStart;
@@ -86,7 +83,6 @@ public class ImageRunner {
                 }
             }
         }
-
     }
 
     // Perform actual file processing

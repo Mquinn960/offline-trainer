@@ -1,39 +1,40 @@
 package com.mquinn.trainer;
 
-import sun.rmi.runtime.Log;
-
+import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
 
 public class EmailNotifier {
 
     private Session session;
     private Properties props;
 
+    private final String SMTP_USERNAME = "your.email.address@gmail.com";
+    private final String SMTP_PASSWORD = "MyPassword1!";
+    private final String SMTP_HOST = "smtp.gmail.com";
+    private final String SMTP_PORT = "465";
+
+    private final String EMAIL_FROM = "your.email.address@gmail.com";
+    private final String EMAIL_TO = "your.email.address@gmail.com";
+
     public EmailNotifier(){
 
         props = new Properties();
 
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.host", SMTP_HOST);
+        props.put("mail.smtp.socketFactory.port", SMTP_PORT);
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
+        props.put("mail.smtp.port", SMTP_PORT);
 
         session = Session.getDefaultInstance(props,
                 new javax.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("mq.sl.trainer@gmail.com","MyPassword1!");
+                        return new PasswordAuthentication(SMTP_USERNAME,SMTP_PASSWORD);
                     }
                 });
 
@@ -45,10 +46,10 @@ public class EmailNotifier {
 
           Message message = new MimeMessage(session);
 
-          message.setFrom(new InternetAddress("mq.sl.trainer@gmail.com"));
+          message.setFrom(new InternetAddress(EMAIL_FROM));
 
           message.setRecipients(Message.RecipientType.TO,
-                  InternetAddress.parse("matt@mquinn.co.uk"));
+                  InternetAddress.parse(EMAIL_TO));
 
           message.setSubject(eventDescription);
 
