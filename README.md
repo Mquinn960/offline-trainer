@@ -1,5 +1,5 @@
 # Offline Trainer
-This project is an offline training and testing module for OpenCV Support Vector Machines. Input image datasets can be classified and compiled into output SVM model files for use with the Sign Language app noted below.
+This project is an offline training and testing module for OpenCV Support Vector Machines. Input image datasets can be classified and compiled into output SVM model files for use with the Sign Language app:
 
 * https://github.com/Mquinn960/sign-language
 
