@@ -71,6 +71,13 @@ An example valid folder structure of multiple datasets can be found below. If yo
 * If you want to train a simple combination of parameters, remove everything else. Otherwise every combination of parameters will be trained and tested.
 * Run the main project once this data is in place, the output ```trained.xml``` files will be output to the project root directory
 * You can now use the trained SVM xml file with the Sign Language app (see repo in header) to test your model on your live Android device
+* To update or change the imaging kernel to use your own feature detection parameters, see the section below on exporting the imaging library from the Sign Language app
+
+## Changing the imaging kernel
+
+The Offline Trainer application uses the exported imaging library of the Sign Language app. This is so that the trained SVM will have been created using an emulated version of what the Sign Language app's camera sees. If you update your Sign Language app fork to change the feature detection method, for example, you need to build and export its imaging library, and import it into the Offline Trainer. For steps on how to export the library, please see the Sign Language app repo below. The exported library ```app-release-null.jar``` should be copied into ```offline-trainer\new```
+
+* https://github.com/Mquinn960/sign-language
 
 ## Built With
 
