@@ -44,6 +44,8 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 ## User Guide
 
+### For a comprehensive step by step guide on using these applications and some additional info on how they work, please see [my new help repo](https://github.com/Mquinn960/sign-language-help)
+
 This project takes in input images named by their class as the first filename letter from "train" and "test" folders within the main dataset folder itself. To easily create these datasets you can use the Dataset Creator python app with your webcam of choice:
 
 * https://github.com/Mquinn960/dataset-creator
