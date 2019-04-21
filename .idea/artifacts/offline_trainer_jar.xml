@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="offline-trainer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/offline_trainer_jar</output-path>
+    <root id="archive" name="offline-trainer.jar">
+      <element id="module-output" name="offline-trainer" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/new/opencv-343.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/new/app-release-null.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/sun/mail/javax.mail/1.5.5/javax.mail-1.5.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
+      <element id="library" level="module" name="opencv343" module-name="offline-trainer" />
+    </root>
+  </artifact>
+</component>
