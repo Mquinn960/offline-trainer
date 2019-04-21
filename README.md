@@ -17,6 +17,8 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 * *(Optional) Add your email credentials to the EmailNotifier class if you wish to receive SMTP emails regarding the training progress*
 
+* Edit the Main method to include/exclude the training parameters you wish as outlined in the *user guide* below
+
 * Method 1 - Manual Classpath
     * Add the following to your ```PATH``` under [environment variables](https://www.java.com/en/download/help/path.xml) in windows: ```F:\Repos\offline-trainer\new``` but substitute for the path to which you have cloned the repo on your computer
     * Load the project in IntellIJ IDEA, load the project and hit run
