@@ -5,6 +5,8 @@ This project is an offline training and testing module for OpenCV Support Vector
 
 ![Alt text](/Preview.png?raw=true "Preview")
 
+## For a comprehensive step by step guide on using these applications and some additional info on how they work, please see [my new help repo](https://github.com/Mquinn960/sign-language-help)
+
 ## Getting Started
 
 * Clone the repo onto your local machine by using:
