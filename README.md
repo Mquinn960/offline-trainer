@@ -14,8 +14,17 @@ This project is an offline training and testing module for OpenCV Support Vector
     SSH: ```git clone git@github.com:Mquinn960/offline-trainer.git```
    
 * Ensure the prerequisites below are installed/satisfied
-* If you're using IntellIJ IDEA, load the project and hit run
-* If not, you can use ```mvn install``` and run the .jar file manually
+
+* *(Optional) Add your email credentials to the EmailNotifier class if you wish to receive SMTP emails regarding the training progress*
+
+* Method 1 - Manual Classpath
+    * Add the following to your ```PATH``` under [environment variables](https://www.java.com/en/download/help/path.xml) in windows: ```F:\Repos\offline-trainer\new``` but substitute for the path to which you have cloned the repo on your computer
+    * Load the project in IntellIJ IDEA, load the project and hit run
+
+* Method 2 - Build artifact and command line
+    * If you want to run the project from the command line you can elect to ```Build->Build Artifact``` which will produce an executable ```.jar``` in the ```offline-trainer\out\artifacts\``` folder
+    * Run this ```.jar``` file from the command line using ```java -Djava.library.path=F:\Repos\offline-trainer\new\ -jar offline-trainer.jar``` but substitute the file path to your cloned repo in the ```java.library.path``` string
+
 * Find the trained SVM XML files and the result logs in the folders specified
 
 ### Prerequisites
